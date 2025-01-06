@@ -1,9 +1,9 @@
 import { getBookletList, getBookDetails, sectionContent } from "./core";
-import { getBooklet, getSection, clearTables } from "./db";
+import { getBooklet, getSection, clearTables } from "@/db";
 
 import fs from 'fs';
 import path from 'path';
-import { initDirectories, Logger } from './utils';
+import { initDirectories, Logger } from '@/utils';
 const writeLog = process.env.NEXT_PUBLIC_WRITE_LOG === 'true';
 
 async function main() {

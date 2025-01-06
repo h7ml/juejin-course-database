@@ -1,5 +1,5 @@
 import { supabase } from './client';
-import { Logger } from '../utils/logger';
+import { Logger } from '@/utils/logger';
 
 // 检查表是否存在
 async function checkTableExists(tableName: string) {

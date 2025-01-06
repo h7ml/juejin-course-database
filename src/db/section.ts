@@ -1,6 +1,6 @@
 import { supabase } from "./client";
-import { Section, BookletDetailResponse } from "../api";
-import { Logger } from '../utils/logger';
+import { Section, BookletDetailResponse } from "@/api/index.d";
+import { Logger } from '@/utils/logger';
 
 // 插入小册的所有章节
 export async function insertBookletSections(bookletDetail: BookletDetailResponse) {

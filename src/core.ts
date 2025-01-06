@@ -1,7 +1,7 @@
-import { getBookletShelfList, getBookletDetail, getSectionContent } from "./api";
-import { insertBookletData, insertBookletSections, insertSectionContent } from "./db";
-import type { Booklet, Section } from "./db";
-import { Logger } from "./utils/logger";
+import { getBookletShelfList, getBookletDetail, getSectionContent } from "@/api";
+import { insertBookletData, insertBookletSections, insertSectionContent } from "@/db";
+import type { Booklet, Section } from "@/db";
+import { Logger } from "@/utils/logger";
 import fs from 'fs';
 import path from 'path';
 

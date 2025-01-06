@@ -1,5 +1,5 @@
 import { supabase } from "./client";
-import { Section, SectionReadingProgress } from "../api";
+import { Section, SectionReadingProgress } from "@/api/index.d";
 
 // 插入章节内容
 export async function insertSection(section: Section) {

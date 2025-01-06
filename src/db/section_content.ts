@@ -1,6 +1,6 @@
 import { supabase } from "./client";
-import { SectionResponse } from "../api";
-import { Logger } from "../utils/logger";
+import { SectionResponse } from "@/api/index.d";
+import { Logger } from "@/utils/logger";
 
 // 插入章节内容
 export async function insertSectionContent(sectionResponse: SectionResponse) {
