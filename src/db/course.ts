@@ -72,7 +72,6 @@ export async function insertBookletData(data: any[]) {
     });
 
     Logger.log('course.log', `收集到 ${userIds.size} 个用户ID, ${bookletIds.size} 个小册ID`);
-    console.log('收集到的用户IDs:', Array.from(userIds));
 
     // 3. 插入用户数据
     console.log('插入用户数据...');
@@ -214,15 +213,6 @@ export async function insertBookletData(data: any[]) {
       const userId = item.reading_progress.user_id;
       const bookletId = item.reading_progress.booklet_id;
 
-      // 添加调试信息
-      console.log('检查阅读进度数据:', {
-        userId,
-        bookletId,
-        userExists: userIds.has(userId),
-        bookletExists: bookletIds.has(bookletId),
-        readingProgress: item.reading_progress
-      });
-
       // 只有当用户ID和小册ID都存在时才插入
       if (userIds.has(userId) && bookletIds.has(bookletId)) {
         const key = `${bookletId}-${userId}`;
@@ -242,7 +232,7 @@ export async function insertBookletData(data: any[]) {
     });
 
     const readingProgress = Array.from(progressMap.values());
-    console.log('准备插入的阅读进度数据:', readingProgress);
+    console.log('准备插入的阅读进度数据:', readingProgress.length);
 
     if (readingProgress.length > 0) {
       const { error: progressError } = await supabase

@@ -15,7 +15,9 @@ async function main() {
     if (writeLog) Logger.log('program_run.log', `程序开始时间: ${startTime}`);
 
     // 清空所有表
-    await clearTables();
+    if (process.env.NEXT_PUBLIC_CLEAR_DATABASE === 'true') {
+      await clearTables();
+    }
 
     // 获取并保存小册列表
     await getBookletList();
@@ -40,15 +42,15 @@ async function main() {
     // 计算程序运行时间
     const runTime = endTime.getTime() - startTime.getTime();
     console.log(`程序运行时间: ${runTime}ms`);
-
+    const hours = Math.floor(runTime / 3600000);
+    const minutes = Math.floor((runTime % 3600000) / 60000);
+    const seconds = Math.floor((runTime % 60000) / 1000);
+    const runTimeStr = `${hours}小时${minutes}分钟${seconds}秒`;
     // 记录到日志文件
     if (writeLog) {
       const logPath = path.join(process.cwd(), '.log', 'program_run.log');
       fs.appendFileSync(logPath, `程序运行时间: ${runTime}ms\n`);
-      const hours = Math.floor(runTime / 3600000);
-      const minutes = Math.floor((runTime % 3600000) / 60000);
-      const seconds = Math.floor((runTime % 60000) / 1000);
-      Logger.success('program_run.log', `程序运行时间: ${hours}小时${minutes}分钟${seconds}秒`);
+      Logger.success('program_run.log', `程序运行时间: ${runTimeStr}`);
     }
 
   } catch (error) {
