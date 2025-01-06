@@ -14,11 +14,19 @@
 ## 环境要求
 
 - Node.js >= 16
-- Bun >= 1.0 (推荐)
+- [Bun](https://bun.sh/docs/installation) >= 1.0 (推荐)
 - Supabase 相关的配置
 - 掘金 Cookie
 
 ## 快速开始
+
+#### 0. 安装Bun
+
+```bash
+brew install bun
+```
+
+> 更多安装方式请参考 [Bun 官网](https://bun.sh/docs/installation)
 
 ### 1. 克隆并安装
 
