@@ -93,30 +93,34 @@ async function sectionContent(sections: Section[]) {
 
         // 获取章节内容
         const response = await getSectionContent(section.section_id);
+        if (response) {
+          // 保存到数据库
+          await insertSectionContent(response);
+          console.log(`- 保存到数据库成功`);
+          // 保存到文件
+          if (writeFile) {
+            const filePath = path.join(process.cwd(), 'booklets', `${section.section_id}.json`);
+            await fs.promises.writeFile(
+              filePath,
+              JSON.stringify(response, null, 2),
+              'utf-8'
+            );
+            console.log(`- 保存到文件成功`);
+          }
 
-        // 保存到数据库
-        await insertSectionContent(response);
-        console.log(`- 保存到数据库成功`);
+          // 添加短暂延时
+          await new Promise(resolve => setTimeout(resolve, 200));
 
-        // 保存到文件
-        if (writeFile) {
-          const filePath = path.join(process.cwd(), 'booklets', `${section.section_id}.json`);
-          await fs.promises.writeFile(
-            filePath,
-            JSON.stringify(response, null, 2),
-            'utf-8'
-          );
-          console.log(`- 保存到文件成功`);
-        }
-
-        // 添加短暂延时
-        await new Promise(resolve => setTimeout(resolve, 200));
-
-        // 记录到日志文件
-        if (writeLog) {
-          const logPath = path.join(process.cwd(), '.log', 'section_content.log');
-          fs.appendFileSync(logPath, `处理章节 ${section.title} 成功\n`);
-          Logger.success('section_content.log', `处理章节 ${section.title} 成功`);
+          // 记录到日志文件
+          if (writeLog) {
+            const logPath = path.join(process.cwd(), '.log', 'section_content.log');
+            fs.appendFileSync(logPath, `处理章节 ${section.title} 成功\n`);
+            Logger.success('section_content.log', `处理章节 ${section.title} 成功`);
+          }
+          continue;
+        } else {
+          console.log(`获取章节内容失败: ${section.title} 章节内容为空`);
+          continue;
         }
 
       } catch (error) {

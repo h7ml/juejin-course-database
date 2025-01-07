@@ -32,8 +32,12 @@ const main = async () => {
     });
     // fs.writeFileSync('./booklets/section_content_empty_filter.json', JSON.stringify(sectionContentEmptyFilter, null, 2));
     // fs.writeFileSync('./booklets/expired_vip_borrows.json', JSON.stringify(expiredVipBorrows, null, 2));
-    console.log(`共计${sectionContentEmptyFilter.length}个空章节内容 需要更新`);
-    await sectionContent(sectionContentEmptyFilter);
+    const sectionContentEmptyFilter2 = sectionContentEmptyFilter.filter((item: any) => {
+      return data.some((borrow: any) => borrow.base_info.booklet_id === item.booklet_id);
+    });
+    fs.writeFileSync('./booklets/section_content_empty_filter2.json', JSON.stringify(sectionContentEmptyFilter2, null, 2));
+    console.log(`共计${sectionContentEmptyFilter2.length}个空章节内容 需要更新`);
+    await sectionContent(sectionContentEmptyFilter2);
   }
 
   const endTime = new Date();
