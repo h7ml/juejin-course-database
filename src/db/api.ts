@@ -101,7 +101,7 @@ export async function getSectionContentEmpty(): Promise<SectionEmpty[]> {
     const { data, error } = await supabase
       .from('section_contents')
       .select('*')
-      .lt('markdown_show', 20)
+      .lt('markdown_show', 1)
       .gt('id', lastId) // 分页条件
       .neq('title', '小册介绍')
       .order('id', { ascending: true }) // 按 id 升序排序
