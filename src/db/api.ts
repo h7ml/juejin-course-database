@@ -1,5 +1,5 @@
 import { supabase } from './client';
-import { Booklet, Section } from './index.d';
+import { Booklet, Section, SectionEmpty } from './index.d';
 
 // 获取sql booklets 表中的 booklet_id 集合
 export function getBooklet(): Promise<Booklet[]> {
@@ -91,3 +91,37 @@ export function getSection(booklet_id?: string): Promise<Section[]> {
   return booklet_id ? getSectionsByBookletId(booklet_id) : getAllSections();
 }
 
+// 获取章节内容为空的数据
+export async function getSectionContentEmpty(): Promise<SectionEmpty[]> {
+  const pageSize = 1000;
+  let allSectionContentEmpty: SectionEmpty[] = [];
+  let lastId = 0;
+
+  while (true) {
+    const { data, error } = await supabase
+      .from('section_contents')
+      .select('*')
+      .lt('markdown_show', 20)
+      .gt('id', lastId) // 分页条件
+      .neq('title', '小册介绍')
+      .order('id', { ascending: true }) // 按 id 升序排序
+      .limit(pageSize);
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data || data.length === 0) {
+      break;
+    }
+
+    allSectionContentEmpty = allSectionContentEmpty.concat(data as SectionEmpty[]);
+    lastId = data[data.length - 1].id;
+
+    if (data.length < pageSize) {
+      break;
+    }
+  }
+
+  return allSectionContentEmpty;
+}

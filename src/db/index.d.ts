@@ -9,3 +9,8 @@ export type Section = {
   section_id: string;
   title: string;
 };
+
+export type SectionEmpty = Booklet & Section & {
+  id: string;
+  content: string;
+};

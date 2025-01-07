@@ -11,6 +11,7 @@ export async function insertSectionContent(sectionResponse: SectionResponse) {
       .from('section_contents')
       .upsert(
         {
+          id: section.id,
           section_id: section.section_id,
           booklet_id: section.booklet_id,
           title: section.title,

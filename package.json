@@ -1,71 +1,72 @@
 {
-    "name": "juejin-course-database",
-    "version": "1.0.0",
-    "author": {
-        "name": "h7ml",
-        "email": "h7ml@qq.com",
-        "url": "https://github.com/h7ml"
+  "name": "juejin-course-database",
+  "version": "1.0.0",
+  "author": {
+    "name": "h7ml",
+    "email": "h7ml@qq.com",
+    "url": "https://github.com/h7ml"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/h7ml/juejin-course-database.git"
+  },
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "jsdelivr": "./src/index.ts",
+  "exports": {
+    ".": {
+      "require": "./src/index.ts",
+      "import": "./src/index.ts",
+      "types": "./src/index.ts"
     },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/h7ml/juejin-course-database.git"
-    },
-    "main": "./src/index.ts",
-    "module": "./src/index.ts",
-    "jsdelivr": "./src/index.ts",
-    "exports": {
-        ".": {
-            "require": "./src/index.ts",
-            "import": "./src/index.ts",
-            "types": "./src/index.ts"
-        },
-        "./src/": {
-            "import": "./src/",
-            "require": "./src/",
-            "types": "./src/"
-        }
-    },
-    "scripts": {
-        "format": "prettier . --write",
-        "start": "bun run src/index.ts"
-    },
-    "bugs": {
-        "url": "https://github.com/h7ml/juejin-course-database/issues"
-    },
-    "description": "将掘金小册数据保存到supabase数据库",
-    "files": [
-        "dist",
-        "README.md",
-        "LICENSE.md",
-        "CHANGELOG.md",
-        "src",
-        "package.json"
-    ],
-    "homepage": "https://github.com/h7ml/juejin-course-database#readme",
-    "keywords": [
-        "juejin",
-        "course",
-        "database"
-    ],
-    "license": "MIT",
-    "private": false,
-    "type": "module",
-    "typesVersions": {
-        "*": {
-            "*": [
-                "./src/index.ts"
-            ]
-        }
-    },
-    "devDependencies": {
-        "@types/node": "^20.11.5",
-        "lint-staged": "^15.2.0",
-        "prettier": "^3.2.4",
-        "typescript": "^5.3.3"
-    },
-    "dependencies": {
-        "@supabase/storage-js": "^2.7.1",
-        "@supabase/supabase-js": "^2.47.10",
-        "axios": "^1.7.9"
+    "./src/": {
+      "import": "./src/",
+      "require": "./src/",
+      "types": "./src/"
     }
+  },
+  "scripts": {
+    "format": "prettier . --write",
+    "start": "bun run src/index.ts",
+    "update:section": "bun run src/update_section.ts"
+  },
+  "bugs": {
+    "url": "https://github.com/h7ml/juejin-course-database/issues"
+  },
+  "description": "将掘金小册数据保存到supabase数据库",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.md",
+    "CHANGELOG.md",
+    "src",
+    "package.json"
+  ],
+  "homepage": "https://github.com/h7ml/juejin-course-database#readme",
+  "keywords": [
+    "juejin",
+    "course",
+    "database"
+  ],
+  "license": "MIT",
+  "private": false,
+  "type": "module",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./src/index.ts"
+      ]
+    }
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@supabase/storage-js": "^2.7.1",
+    "@supabase/supabase-js": "^2.47.10",
+    "axios": "^1.7.9"
+  }
 }

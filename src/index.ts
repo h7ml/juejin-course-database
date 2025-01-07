@@ -41,11 +41,12 @@ async function main() {
 
     // 计算程序运行时间
     const runTime = endTime.getTime() - startTime.getTime();
-    console.log(`程序运行时间: ${runTime}ms`);
+
     const hours = Math.floor(runTime / 3600000);
     const minutes = Math.floor((runTime % 3600000) / 60000);
     const seconds = Math.floor((runTime % 60000) / 1000);
     const runTimeStr = `${hours}小时${minutes}分钟${seconds}秒`;
+    console.log(`程序运行时间: ${runTimeStr}`);
     // 记录到日志文件
     if (writeLog) {
       const logPath = path.join(process.cwd(), '.log', 'program_run.log');
