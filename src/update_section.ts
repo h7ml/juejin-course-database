@@ -1,5 +1,6 @@
-import { getSectionContentEmpty } from "@/db/api";
-import { getBookDetails } from "./core";
+import { getSectionContentEmpty, getBooklet } from "@/db";
+import { getBookletShelfList } from "@/api";
+import { sectionContent } from "./core";
 import { Logger } from "@/utils";
 import fs from 'fs';
 const writeLog = process.env.NEXT_PUBLIC_WRITE_LOG === 'true';
@@ -14,11 +15,26 @@ const main = async () => {
     return;
   }
   else {
-    fs.writeFileSync('./booklets/section_content_empty.json', JSON.stringify(sectionContentEmpty, null, 2));
+    // fs.writeFileSync('./booklets/section_content_empty.json', JSON.stringify(sectionContentEmpty, null, 2));
     console.log(`共计${sectionContentEmpty.length}个空章节内容`);
-    await getBookDetails(sectionContentEmpty);
-  }
+    // 查询所有的 sections 
+    const { data = [] } = await getBookletShelfList();
+    // fs.writeFileSync('./booklets/sections.json', JSON.stringify(data, null, 2));
 
+    // 筛选出过期的 VIP 借阅
+    const expiredVipBorrows = data.filter((item: any) => {
+      // 检查是否有 VIP 借阅并且是否过期
+      return item.is_buy === false && item.base_info.is_distribution && item.base_info.price > 0;
+    });
+    // 使用 lodash 过滤掉 sectionContentEmpty 中 与 expiredVipBorrows booklet_id 相同的
+    const sectionContentEmptyFilter = sectionContentEmpty.filter((item: any) => {
+      return !expiredVipBorrows.some((borrow: any) => borrow.base_info.booklet_id === item.booklet_id);
+    });
+    // fs.writeFileSync('./booklets/section_content_empty_filter.json', JSON.stringify(sectionContentEmptyFilter, null, 2));
+    // fs.writeFileSync('./booklets/expired_vip_borrows.json', JSON.stringify(expiredVipBorrows, null, 2));
+    console.log(`共计${sectionContentEmptyFilter.length}个空章节内容 需要更新`);
+    await sectionContent(sectionContentEmptyFilter);
+  }
 
   const endTime = new Date();
   if (writeLog) Logger.log('program_run.log', `程序结束时间: ${endTime}`);

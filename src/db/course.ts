@@ -51,6 +51,11 @@ export async function insertBookletData(data: any[]) {
   console.log('开始插入/更新数据...');
   Logger.log('course.log', '开始插入/更新数据');
 
+  // 筛选出过期的 VIP 借阅
+  const expiredVipBorrows = data.filter((item: any) => {
+    // 检查是否有 VIP 借阅并且是否过期
+    return item.is_buy === false && item.base_info.is_distribution && item.base_info.price > 0;
+  });
   // 确保数据库表已创建
   const isInitialized = await initDatabase();
   if (!isInitialized) {
@@ -63,7 +68,7 @@ export async function insertBookletData(data: any[]) {
     // 收集所有用户ID和小册ID
     const userIds = new Set();
     const bookletIds = new Set();
-    data.forEach(item => {
+    expiredVipBorrows.forEach(item => {
       userIds.add(item.user_info.user_id);
       bookletIds.add(item.booklet_id);
       if (item.reading_progress?.user_id) {
@@ -77,7 +82,7 @@ export async function insertBookletData(data: any[]) {
     console.log('插入用户数据...');
     Logger.log('course.log', '开始插入用户数据');
     const userMap = new Map();
-    data.forEach(item => {
+    expiredVipBorrows.forEach(item => {
       // 添加小册作者的用户信息
       userMap.set(item.user_info.user_id, {
         user_id: item.user_info.user_id,
@@ -137,7 +142,7 @@ export async function insertBookletData(data: any[]) {
     console.log('插入小册数据...');
     Logger.log('course.log', '开始插入小册数据');
     const bookletMap = new Map();
-    data.forEach(item => {
+    expiredVipBorrows.forEach(item => {
       bookletMap.set(item.booklet_id, {
         booklet_id: item.booklet_id,
         title: item.base_info.title,
@@ -176,7 +181,7 @@ export async function insertBookletData(data: any[]) {
     console.log('插入用户成长信息...');
     Logger.log('course.log', '开始插入用户成长信息');
     const growthMap = new Map();
-    data.forEach(item => {
+    expiredVipBorrows.forEach(item => {
       if (userIds.has(item.user_info.user_id)) {
         growthMap.set(item.user_info.user_id, {
           user_id: item.user_info.user_id,
@@ -209,7 +214,7 @@ export async function insertBookletData(data: any[]) {
     console.log('插入阅读进度...');
     Logger.log('course.log', '开始插入阅读进度');
     const progressMap = new Map();
-    data.forEach(item => {
+    expiredVipBorrows.forEach(item => {
       const userId = item.reading_progress.user_id;
       const bookletId = item.reading_progress.booklet_id;
 
