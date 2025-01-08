@@ -76,7 +76,7 @@ async function getBookDetails(booklets: Booklet[]) {
 }
 
 // 获取小册章节
-async function sectionContent(sections: Section[]) {
+async function sectionContent(sections: Section[], type: 'update' | 'insert' = 'insert') {
   if (writeLog) Logger.log('section_content.log', `开始获取章节内容: 共 ${sections.length} 个章节`);
   console.log(`开始获取章节内容: 共 ${sections.length} 个章节`);
 
@@ -95,17 +95,21 @@ async function sectionContent(sections: Section[]) {
         const response = await getSectionContent(section.section_id);
         if (response) {
           // 保存到数据库
-          await insertSectionContent(response);
-          console.log(`- 保存到数据库成功`);
-          // 保存到文件
-          if (writeFile) {
-            const filePath = path.join(process.cwd(), 'booklets', `${section.section_id}.json`);
-            await fs.promises.writeFile(
-              filePath,
-              JSON.stringify(response, null, 2),
-              'utf-8'
-            );
-            console.log(`- 保存到文件成功`);
+          if (type === 'insert' || (type === 'update' && response.data.markdown_content)) {
+            await insertSectionContent(response);
+            console.log(`- 保存到数据库成功`);
+            // 保存到文件
+            if (writeFile) {
+              const filePath = path.join(process.cwd(), 'booklets', `${section.section_id}.json`);
+              await fs.promises.writeFile(
+                filePath,
+                JSON.stringify(response, null, 2),
+                'utf-8'
+              );
+              console.log(`- 保存到文件成功`);
+            }
+          } else {
+            console.log(`章节内容为空: ${section.title}`);
           }
 
           // 添加短暂延时

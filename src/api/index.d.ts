@@ -159,6 +159,7 @@ interface SectionResponse {
   err_msg: string;
   data: {
     section: Section;
+    markdown_content: string;
   }
 }
 
