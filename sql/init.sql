@@ -92,6 +92,7 @@ CREATE TABLE IF NOT EXISTS sections (
   draft_content TEXT,
   draft_title TEXT,
   markdown_show TEXT,
+  markdown_content TEXT,
   is_free BOOLEAN DEFAULT false,
   read_time INTEGER DEFAULT 0,
   read_count INTEGER DEFAULT 0,

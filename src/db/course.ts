@@ -52,10 +52,24 @@ export async function insertBookletData(data: any[]) {
   Logger.log('course.log', '开始插入/更新数据');
 
   // 筛选出过期的 VIP 借阅
-  const expiredVipBorrows = data.filter((item: any) => {
-    // 检查是否有 VIP 借阅并且是否过期
-    return item.is_buy === false && item.base_info.is_distribution && item.base_info.price > 0;
-  });
+  const filterExpiredVipBorrows = (data: any[]) => {
+    const vipBorrows = data.filter((item: any) => {
+      // 检查是否有 VIP 借阅并且是否过期
+      return item.is_buy === false && item.base_info.is_distribution && item.base_info.price > 0;
+    });
+    return vipBorrows.filter((item: any) => {
+      // 先排除过期 VIP 借阅项
+      const isNotExpiredBorrow = !vipBorrows.some((borrow: any) => borrow.base_info.booklet_id === item.booklet_id);
+
+      // 保留在 data 中的 booklet_id
+      const isInData = data.some((borrow: any) => borrow.base_info.booklet_id === item.booklet_id);
+
+      // 只有同时符合两者条件才保留
+      return isNotExpiredBorrow && isInData;
+    });
+  };
+  const expiredVipBorrows = filterExpiredVipBorrows(data);
+
   // 确保数据库表已创建
   const isInitialized = await initDatabase();
   if (!isInitialized) {
@@ -153,7 +167,7 @@ export async function insertBookletData(data: any[]) {
         summary: item.base_info.summary,
         cover_img: item.base_info.cover_img,
         section_count: item.base_info.section_count,
-        section_ids: item.base_info.section_ids,
+        section_ids: item.base_info.section_ids.split('|'),
         is_finished: item.base_info.is_finished,
         read_time: item.base_info.read_time,
         buy_count: item.base_info.buy_count,
@@ -186,7 +200,7 @@ export async function insertBookletData(data: any[]) {
         growthMap.set(item.user_info.user_id, {
           user_id: item.user_info.user_id,
           jpower: item.user_info.user_growth_info.jpower,
-          jscore: item.user_info.user_growth_info.jscore,
+          jscore: Math.floor(item.user_info.user_growth_info.jscore),
           jpower_level: item.user_info.user_growth_info.jpower_level,
           jscore_level: item.user_info.user_growth_info.jscore_level,
           jscore_title: item.user_info.user_growth_info.jscore_title,

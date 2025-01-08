@@ -1,8 +1,7 @@
-import { getSectionContentEmpty, getBooklet } from "@/db";
+import { getSectionContentEmpty } from "@/db";
 import { getBookletShelfList } from "@/api";
 import { sectionContent } from "./core";
 import { Logger } from "@/utils";
-import fs from 'fs';
 const writeLog = process.env.NEXT_PUBLIC_WRITE_LOG === 'true';
 
 const main = async () => {
@@ -15,11 +14,9 @@ const main = async () => {
     return;
   }
   else {
-    // fs.writeFileSync('./booklets/section_content_empty.json', JSON.stringify(sectionContentEmpty, null, 2));
     console.log(`共计${sectionContentEmpty.length}个空章节内容`);
     // 查询所有的 sections 
     const { data = [] } = await getBookletShelfList();
-    // fs.writeFileSync('./booklets/sections.json', JSON.stringify(data, null, 2));
 
     // 筛选出过期的 VIP 借阅
     const expiredVipBorrows = data.filter((item: any) => {
